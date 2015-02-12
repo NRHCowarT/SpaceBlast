@@ -6,12 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "AirBlast.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "AirBlast.png"
+      "scale" : "3x"
     }
   ],
   "info" : {

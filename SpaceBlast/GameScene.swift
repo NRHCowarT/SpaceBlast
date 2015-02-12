@@ -8,9 +8,17 @@
 
 import SpriteKit
 
+
 class GameScene: SKScene {
     
     var screenCenter: CGPoint!
+    
+    var ship: SKSpriteNode!
+    
+    var airBlastUp: SKSpriteNode!
+    var airBlastDown: SKSpriteNode!
+    
+    
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -19,17 +27,41 @@ class GameScene: SKScene {
         
         createMoon()
         
-        let ship = SKSpriteNode(imageNamed: "ship")
+        ship = SKSpriteNode(imageNamed: "ship")
         
         ship.position = screenCenter
         
         self.addChild(ship)
-       
+        
+        airBlastDown = SKSpriteNode(imageNamed: "airBlastDown")
+        ship.addChild(airBlastDown)
+        airBlastDown.position = CGPointMake(position.x - 25, position.y + 60)
+        airBlastDown.hidden = true
+        
+        
+        airBlastUp = SKSpriteNode(imageNamed: "airBlastUp")
+        ship.addChild(airBlastUp)
+        airBlastUp.position = CGPointMake(position.x - 25, position.y - 60)
+        airBlastUp.hidden = true
+        
+        
+        //UIGestureRecognizer
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: Selector("downSwiped"))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        view.addGestureRecognizer(swipeDown)
+        
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: Selector("upSwiped"))
+        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
+        view.addGestureRecognizer(swipeUp)
+        
         // add gestures up and down to move ship
-       
+        
         // make sound "pftt"
         
     }
+    
+    
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
@@ -44,7 +76,7 @@ class GameScene: SKScene {
             
         }
     }
-   
+    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
@@ -90,6 +122,41 @@ class GameScene: SKScene {
         let moonRotation = SKAction.rotateByAngle(CGFloat(M_PI), duration: 10)
         
         moon.runAction(SKAction.repeatActionForever(moonRotation))
+        
+        
+    }
+    
+    func upSwiped() {
+        
+        println("up swiped")
+        
+        airBlastUp.hidden = false
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector:  Selector("someSelector"), userInfo: nil, repeats: false)
+
+        
+        self.ship.position = CGPointMake(self.ship.position.x, self.ship.position.y + 50)
+        
+        
+    }
+    
+    func downSwiped() {
+        println("down swiped")
+        
+        
+        airBlastDown.hidden = false
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector:  Selector("someSelector"), userInfo: nil, repeats: false)
+
+        
+        self.ship.position = CGPointMake(self.ship.position.x, self.ship.position.y - 50)
+  
+    }
+    
+    func someSelector() {
+        
+        airBlastDown.hidden = true
+        airBlastUp.hidden = true
         
         
     }
